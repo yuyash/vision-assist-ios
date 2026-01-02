@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisionAssist Code Coverage Report</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: #f5f5f7; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { color: #1d1d1f; }
+    .summary { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .coverage-bar { height: 24px; background: #e5e5e5; border-radius: 12px; overflow: hidden; }
+    .coverage-fill { height: 100%; transition: width 0.3s; }
+    .high { background: #34c759; }
+    .medium { background: #ff9500; }
+    .low { background: #ff3b30; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e5e5e5; }
+    th { background: #f5f5f7; font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .percent { font-weight: 600; }
+    .timestamp { color: #86868b; font-size: 14px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 VisionAssist Code Coverage Report</h1>
+    <div class="summary" id="summary"></div>
+    <table id="coverage-table">
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Coverage</th>
+          <th>Lines</th>
+        </tr>
+      </thead>
+      <tbody id="coverage-body"></tbody>
+    </table>
+    <p class="timestamp" id="timestamp"></p>
+  </div>
+  <script>
+    fetch('coverage.json')
+      .then(r => r.json())
+      .then(data => {
+        const targets = data.targets || [];
+        const appTarget = targets.find(t => t.name === 'VisionAssist.app') || targets[0];
+        if (!appTarget) return;
+        
+        const totalCoverage = (appTarget.lineCoverage * 100).toFixed(1);
+        const coverageClass = totalCoverage >= 80 ? 'high' : totalCoverage >= 50 ? 'medium' : 'low';
+        
+        document.getElementById('summary').innerHTML = `
+          <h2>Overall Coverage: <span class="percent">${totalCoverage}%</span></h2>
+          <div class="coverage-bar">
+            <div class="coverage-fill ${coverageClass}" style="width: ${totalCoverage}%"></div>
+          </div>
+        `;
+        
+        const tbody = document.getElementById('coverage-body');
+        (appTarget.files || []).forEach(file => {
+          const pct = (file.lineCoverage * 100).toFixed(1);
+          const cls = pct >= 80 ? 'high' : pct >= 50 ? 'medium' : 'low';
+          const name = file.name || file.path.split('/').pop();
+          tbody.innerHTML += `
+            <tr>
+              <td>${name}</td>
+              <td>
+                <div class="coverage-bar" style="width:200px;height:16px;">
+                  <div class="coverage-fill ${cls}" style="width:${pct}%"></div>
+                </div>
+                <span class="percent">${pct}%</span>
+              </td>
+              <td>${file.coveredLines}/${file.executableLines}</td>
+            </tr>
+          `;
+        });
+        
+        document.getElementById('timestamp').textContent = 'Generated: ' + new Date().toLocaleString();
+      });
+  </script>
+</body>
+</html>
