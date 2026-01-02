@@ -28,7 +28,7 @@ jobs:
           xcodebuild build \
             -project VisionAssist.xcodeproj \
             -scheme VisionAssist \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
             -configuration Debug \
             CODE_SIGNING_ALLOWED=NO
 
@@ -37,7 +37,7 @@ jobs:
           xcodebuild test \
             -project VisionAssist.xcodeproj \
             -scheme VisionAssist \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
             -configuration Debug \
             -enableCodeCoverage YES \
             -resultBundlePath TestResults.xcresult \
@@ -48,7 +48,7 @@ jobs:
           xcodebuild test \
             -project VisionAssist.xcodeproj \
             -scheme VisionAssist \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
             -configuration Debug \
             -only-testing:VisionAssistUITests \
             CODE_SIGNING_ALLOWED=NO
