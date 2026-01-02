@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: macos-15
+    runs-on: macos-26
     
     steps:
       - name: Checkout
@@ -28,7 +28,7 @@ jobs:
           xcodebuild build \
             -project VisionAssist.xcodeproj \
             -scheme VisionAssist \
-            -destination 'platform=macOS' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             CODE_SIGNING_ALLOWED=NO
 
@@ -37,7 +37,7 @@ jobs:
           xcodebuild test \
             -project VisionAssist.xcodeproj \
             -scheme VisionAssist \
-            -destination 'platform=macOS' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             -enableCodeCoverage YES \
             -resultBundlePath TestResults.xcresult \
@@ -48,7 +48,7 @@ jobs:
           xcodebuild test \
             -project VisionAssist.xcodeproj \
             -scheme VisionAssist \
-            -destination 'platform=macOS' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -configuration Debug \
             -only-testing:VisionAssistUITests \
             CODE_SIGNING_ALLOWED=NO
